@@ -1,0 +1,2 @@
+1;Ragu;35;125.5;ragu_01
+2;Spagety;40;160;blank
