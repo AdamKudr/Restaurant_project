@@ -75,9 +75,9 @@ public class Dish {
     @Override
     public String toString() {
         return  "dishID=" + dishID +
-                ", title='" + title + '\'' +
+                ", title='" + title +
                 ", price=" + price +
                 ", preparationTime=" + preparationTime +
-                ", url='" + url + '\'';
+                ", url='" + url + '\n';
     }
 }

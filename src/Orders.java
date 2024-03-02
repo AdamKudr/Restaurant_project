@@ -92,7 +92,8 @@ public class Orders {
                         + order.getPieces() + delimiter
                         + order.getMeal().getDishID() + delimiter
                         + order.getOrderTime() + delimiter
-                        + order.getFulfilmentTime());
+                        + order.getFulfilmentTime() + delimiter
+                        + order.isPaid());
             }
 
         } catch (FileNotFoundException e) {
