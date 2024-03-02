@@ -18,13 +18,19 @@ public class Main {
             System.err.println("Nastala chyba při vytváření jídla:" + e.getLocalizedMessage());
         }
 
-        orders.addOrder(new Orders(1, 3, menu.cookbook.get(0).getDishID(), LocalDateTime.now()));
+        orders.addOrder(new Orders(1, 3, menu.cookbook.get(0), LocalDateTime.now()));
 
         System.out.println(menu.getCookbook());
         System.out.println(orders.getOrders());
 
         try {
             menu.saveToFile("menu.txt");
+        } catch (OrdersException e) {
+            System.err.println("Nastala chyba při ukládání do souboru " + e.getLocalizedMessage());
+        }
+
+        try {
+            orders.saveToFile("orders.txt");
         } catch (OrdersException e) {
             System.err.println("Nastala chyba při ukládání do souboru " + e.getLocalizedMessage());
         }

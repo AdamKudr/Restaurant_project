@@ -74,12 +74,10 @@ public class Dish {
 
     @Override
     public String toString() {
-        return "Dish{" +
-                "dishID=" + dishID +
+        return  "dishID=" + dishID +
                 ", title='" + title + '\'' +
                 ", price=" + price +
                 ", preparationTime=" + preparationTime +
-                ", url='" + url + '\'' +
-                '}';
+                ", url='" + url + '\'';
     }
 }

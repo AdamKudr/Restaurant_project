@@ -1,3 +1,4 @@
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -8,16 +9,16 @@ public class Orders {
 
     int table;
     int pieces;
-    int mealID;
+    Dish meal;
     LocalDateTime orderTime;
-    LocalDateTime fulfilmentTime = LocalDateTime.of(1899, 1, 1, 0, 0).MAX.truncatedTo(ChronoUnit.MINUTES);
+    LocalDateTime fulfilmentTime = LocalDateTime.parse(LocalDateTime.of(0000, 1, 1, 0, 0).toString());
     boolean paid;
     List<Orders> orders;
 
-    public Orders(int table, int pieces, int mealID, LocalDateTime orderTime) {
+    public Orders(int table, int pieces, Dish meal, LocalDateTime orderTime) {
         this.table = table;
         this.pieces = pieces;
-        this.mealID = mealID;
+        this.meal = meal;
         this.orderTime = orderTime.truncatedTo(ChronoUnit.MINUTES);
         paid = false;
     }
@@ -42,12 +43,12 @@ public class Orders {
         this.pieces = pieces;
     }
 
-    public int getMeal() {
-        return mealID;
+    public Dish getMeal() {
+        return meal;
     }
 
-    public void setMeal(int mealID) {
-        this.mealID = mealID;
+    public void setMeal(Dish meal) {
+        this.meal = meal;
     }
 
     public LocalDateTime getOrderTime() {
@@ -75,6 +76,7 @@ public class Orders {
     }
 
     public void addOrder(Orders order) {
+
         orders.add(order);
     }
 
@@ -82,15 +84,31 @@ public class Orders {
         return orders;
     }
 
+    public void saveToFile(String fileName) throws OrdersException {
+        String delimiter = ";";
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)))) {
+            for (Orders order : orders) {
+                writer.println(order.getTable() + delimiter
+                        + order.getPieces() + delimiter
+                        + order.getMeal().getDishID() + delimiter
+                        + order.getOrderTime() + delimiter
+                        + order.getFulfilmentTime());
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Soubor " + fileName + " nenalezen");
+        } catch (IOException e) {
+            throw new OrdersException("Chyba výstupu při zápisu do souboru " + fileName + ". " + e.getLocalizedMessage());
+        }
+    }
+
     @Override
     public String toString() {
-        return "Orders:\n" +
-                "table:" + table +
+        return  "table:" + table +
                 ", pieces:" + pieces +
-                ", mealID:" + mealID +
+                ", dish:" + meal.getDishID() +
                 ", orderTime:" + orderTime +
                 ", fulfilmentTime:" + fulfilmentTime +
                 ", paid:" + paid;
     }
 }
-
