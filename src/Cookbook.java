@@ -1,6 +1,8 @@
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Cookbook {
 
@@ -22,8 +24,8 @@ public class Cookbook {
         cookbook.add(dish);
     }
 
-    public void removeDish(Dish dish) {
-        cookbook.remove(dish);
+    public void removeDish(int dishID) {
+        cookbook.remove(cookbook.get(dishID+-1));
     }
 
     public void saveToFile (String fileName) throws OrdersException {
@@ -44,4 +46,26 @@ public class Cookbook {
             throw new OrdersException("Chyba výstupu při zápisu do souboru " + fileName + ". " + e.getLocalizedMessage());
         }
         }
-}
+    public void loadFromFile (String fileName) throws OrdersException {
+        int linecounter = 0;
+        cookbook.clear();
+        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(fileName)))) {
+            while (scanner.hasNextLine()) {
+                linecounter++;
+                String line = scanner.nextLine();
+                String[] parts = line.split(";");
+                if (parts.length != 5) throw new OrdersException("Nesprávný počet položek na řádku " + linecounter + " !");
+                int dishID = Integer.parseInt(parts[0]);
+                String title = parts[1];
+                BigDecimal price = new BigDecimal(parts[3]);
+                int preparationTime = Integer.parseInt(parts[2]);
+                String url = parts[4];
+                Dish dish = new Dish(dishID, title, price, preparationTime, url);
+                cookbook.add(dish);
+                }
+            }
+        catch (FileNotFoundException e) {
+            throw new OrdersException("Soubor " + fileName + " nenalezen! " + e.getLocalizedMessage());
+        }
+        }
+    }

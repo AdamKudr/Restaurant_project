@@ -78,6 +78,6 @@ public class Dish {
                 ", title='" + title +
                 ", price=" + price +
                 ", preparationTime=" + preparationTime +
-                ", url='" + url + '\n';
+                ", url='" + url;
     }
 }
