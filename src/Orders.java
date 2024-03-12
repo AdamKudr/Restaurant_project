@@ -1,6 +1,4 @@
 import java.io.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -13,7 +11,8 @@ public class Orders {
     int pieces;
     Dish meal;
     LocalDateTime orderTime;
-    LocalDateTime fulfilmentTime = LocalDateTime.parse(LocalDateTime.of(0000, 1, 1, 0, 0).toString());
+    LocalDateTime fulfilmentTime = LocalDateTime.parse(LocalDateTime.MIN.toString());
+    boolean fulfilled;
     boolean paid;
     List<Orders> orders;
 
@@ -22,6 +21,7 @@ public class Orders {
         this.pieces = pieces;
         this.meal = meal;
         this.orderTime = orderTime.truncatedTo(ChronoUnit.MINUTES);
+        fulfilled = false;
         paid = false;
     }
 
@@ -69,6 +69,14 @@ public class Orders {
         this.fulfilmentTime = fulfilmentTime;
     }
 
+    public boolean isFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(boolean fulfilled) {
+        this.fulfilled = fulfilled;
+    }
+
     public boolean isPaid() {
         return paid;
     }
@@ -89,6 +97,12 @@ public class Orders {
         return orders;
     }
 
+    public void orderFulfilled(Orders order) {
+        order.setFulfilmentTime(LocalDateTime.now());
+        order.setFulfilled(true);
+
+    }
+
     public void saveToFile(String fileName) throws OrdersException {
         String delimiter = ";";
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)))) {
@@ -98,6 +112,7 @@ public class Orders {
                         + order.getMeal().getDishID() + delimiter
                         + order.getOrderTime() + delimiter
                         + order.getFulfilmentTime() + delimiter
+                        + order.isFulfilled() + delimiter
                         + order.isPaid());
             }
 
@@ -116,13 +131,14 @@ public class Orders {
                 linecounter++;
                 String line = scanner.nextLine();
                 String[] parts = line.split(";");
-                if (parts.length != 6) throw new OrdersException("Nesprávný počet položek na řádku " + linecounter + " !");
+                if (parts.length != 7) throw new OrdersException("Nesprávný počet položek na řádku " + linecounter + " !");
                 int table = Integer.parseInt(parts[0]);
                 int pieces = Integer.parseInt(parts[1]);
                 int dishID = Integer.parseInt(parts[2]);
                 LocalDateTime orderTime = LocalDateTime.parse(parts[3]);
                 LocalDateTime fulfilmentTime = LocalDateTime.parse(parts[4]);
-                boolean paid = Boolean.parseBoolean(parts[5]);
+                boolean fulfilled = Boolean.parseBoolean(parts[5]);
+                boolean paid = Boolean.parseBoolean(parts[6]);
                 Dish meal = null;
                 for (Dish dish : cookbook.getCookbook()) {
                     if (dish.getDishID() == dishID) {
