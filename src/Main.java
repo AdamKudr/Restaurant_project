@@ -60,10 +60,10 @@ public class Main {
         //použití připravených metod - úkol č. 4
 
         //Počet rozpracovaných objednávek
-        System.out.println(manager.ordersInProgress(orders.getOrders()));
+        System.out.println("Počet rozpracovaných objednávek: " + manager.ordersInProgress(orders.getOrders()));
 
         //Seřazení objednávek dle času zadání
-        System.out.println(manager.sortOrdersByOrderTime(orders.getOrders()));
+        System.out.println(manager.sortOrdersByOrderTime(orders.getOrders()).toString().replace("[","").replace("]", "").replace(",", "").trim());
 
         //Průměrná doba zpracování objednávek
         System.out.println("Průměrná doba zpracování objednávek je: " + manager.averageOrderProcessingTime(orders.getOrders()) + " minut");

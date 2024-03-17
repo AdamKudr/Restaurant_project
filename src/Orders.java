@@ -162,9 +162,9 @@ public class Orders {
     public String toString() {
         return  "table:" + table +
                 ", pieces:" + pieces +
-                ", (dish: " + meal + " )" +
+                ", dish: " + meal.getTitle() +
                 ", orderTime:" + orderTime +
                 ", fulfilmentTime:" + fulfilmentTime +
-                ", paid:" + paid;
+                ", paid:" + paid + ";\n";
     }
 }
